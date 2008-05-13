@@ -53,7 +53,7 @@ class RopeMode(object):
     def _refactoring_name(self, refactoring):
         return refactor.refactoring_name(refactoring)
 
-    @decorators.rope_hook('before-save-hook')
+    @decorators.rope_hook('before_save')
     def before_save_actions(self):
         if self.project is not None:
             if not self._is_python_file(self.env.filename()):
@@ -64,14 +64,14 @@ class RopeMode(object):
             else:
                 self.old_content = ''
 
-    @decorators.rope_hook('after-save-hook')
+    @decorators.rope_hook('after_save')
     def after_save_actions(self):
         if self.project is not None and self.old_content is not None:
             libutils.report_change(self.project, self.env.filename(),
                                    self.old_content)
             self.old_content = None
 
-    @decorators.rope_hook('kill-emacs-hook')
+    @decorators.rope_hook('exit')
     def exiting_actions(self):
         if self.project is not None:
             self.close_project()

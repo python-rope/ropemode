@@ -37,9 +37,9 @@ def show_dialog(askdata, actions, confs={}, optionals={}, initial_asking=True):
         for name, conf in confs.items():
             result[name] = askdata(conf)
     actions.append('batchset')
-    names = list(confs.keys())
+    names = list(actions)
     names.extend(optionals.keys())
-    names.extend(actions)
+    names.extend(confs.keys())
     base_question = Data('Choose what to do: ',
                          default=actions[0], values=names)
     batchset_question = Data('Batch sets: ')

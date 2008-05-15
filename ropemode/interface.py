@@ -175,15 +175,7 @@ class RopeMode(object):
         offset = self.env.get_offset()
         docs = get_doc(self.project, text, offset,
                        self._get_resource(), maxfixes)
-
-        use_minibuffer = not prefix
-        if self.env.get('separate_doc_buffer'):
-            use_minibuffer = not use_minibuffer
-        if use_minibuffer and docs:
-            docs = '\n'.join(docs.split('\n')[:7])
-            self.env.message(docs)
-        else:
-            self.env.show_doc(docs)
+        self.env.show_doc(docs, prefix)
         if docs is None:
             self.env.message('No docs avilable!')
 

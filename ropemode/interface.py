@@ -425,7 +425,6 @@ class RopeMode(object):
         return result
 
     def _save_buffers(self, only_current=False):
-        ask = self.env.get('confirm_saving')
         if only_current:
             filenames = self.env.filename()
         else:
@@ -434,7 +433,7 @@ class RopeMode(object):
         for filename in filenames:
             if self._is_python_file(filename):
                 pythons.append(filename)
-        self.env.save_files(pythons, ask)
+        self.env.save_files(pythons)
 
     def _is_python_file(self, path):
         resource = self._get_resource(path)

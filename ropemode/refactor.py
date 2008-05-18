@@ -31,7 +31,7 @@ class Refactoring(object):
         self.interface._save_buffers(only_current=not self.saveall)
         self._create_refactoring()
         action, result = dialog.show_dialog(
-            self.env.askdata, ['perform', 'preview', 'cancel'],
+            self.interface._askdata, ['perform', 'preview', 'cancel'],
             self._get_confs(), self._get_optionals(),
             initial_asking=initial_asking)
         if action == 'cancel':

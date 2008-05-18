@@ -190,7 +190,7 @@ class RopeMode(object):
         resource, offset = self._get_location()
 
         action, values = dialog.show_dialog(
-            self.env.askdata, ['search', 'cancel'], optionals=optionals)
+            self._askdata, ['search', 'cancel'], optionals=optionals)
         if action == 'search':
             kwds = get_kwds(values)
             def calculate(handle):
@@ -368,7 +368,7 @@ class RopeMode(object):
                 parentname.title() + ' Folder: ',
                 default=self.project.address, kind='directory')}
         action, values = dialog.show_dialog(
-            self.env.askdata, ['perform', 'cancel'], confs, optionals)
+            self._askdata, ['perform', 'cancel'], confs, optionals)
         if action == 'perform':
             parent = libutils.path_to_resource(
                 self.project, values.get(parentname, self.project.address))
@@ -441,6 +441,16 @@ class RopeMode(object):
                 resource.project == self.project and
                 self.project.pycore.is_python_file(resource))
 
+    def _askdata(self, data, starting=None):
+        ask_func = self.env.ask
+        ask_args = {'prompt': data.prompt, 'starting': starting,
+                    'default': data.default}
+        if data.values:
+            ask_func = self.env.ask_values
+            ask_args['values'] = data.values
+        elif data.kind == 'directory':
+            ask_func = self.env.ask_directory
+        return ask_func(**ask_args)
 
 
 class _CodeAssist(object):

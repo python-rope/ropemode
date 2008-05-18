@@ -1,13 +1,15 @@
 class Environment(object):
 
-    def ask_values(self, prompt, values, default=None,
-                   starting=None, exact=True):
-        pass
-
     def ask(self, prompt, default=None, starting=None):
         pass
 
+    def ask_values(self, prompt, values, default=None, starting=None):
+        pass
+
     def ask_directory(self, prompt, default=None, starting=None):
+        pass
+
+    def ask_completion(self, prompt, values, starting=None):
         pass
 
     def message(self, message):

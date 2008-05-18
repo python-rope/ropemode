@@ -290,7 +290,7 @@ class RopeMode(object):
         names = []
         for file in files:
             names.append('<'.join(reversed(file.path.split('/'))))
-        result = self.env.ask_values('Rope Find File: ', names, exact=True)
+        result = self.env.ask_values('Rope Find File: ', names)
         if result is not None:
             path = '/'.join(reversed(result.split('<')))
             file = self.project.get_file(path)
@@ -476,8 +476,7 @@ class _CodeAssist(object):
             self._starting = common_start
             self._offset = self.starting_offset + len(common_start)
         prompt = 'Completion for %s: ' % self.expression
-        result = self.env.ask_values(prompt, names,
-                                     starting=self.starting, exact=None)
+        result = self.env.ask_completion(prompt, names, self.starting)
         self._apply_assist(result)
 
     def lucky_assist(self, prefix):

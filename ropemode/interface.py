@@ -199,13 +199,7 @@ class RopeMode(object):
                 return do_find(self.project, resource, offset,
                                resources=resources, task_handle=handle, **kwds)
             result = refactor.runtask(self.env, calculate, 'Find Occurrences')
-            locations = []
-            for occurrence in result:
-                note = ''
-                if occurrence.unsure:
-                    note = '?'
-                locations.append((occurrence.resource.path,
-                                  occurrence.offset, note))
+            locations = [Location(location) for location in result]
             self.env.show_occurrences(locations)
 
     @decorators.local_command('a f', shortcut='C-c f')
@@ -451,6 +445,16 @@ class RopeMode(object):
         elif data.kind == 'directory':
             ask_func = self.env.ask_directory
         return ask_func(**ask_args)
+
+
+class Location(object):
+    def __init__(self, location):
+        self.filename = location.resource.real_path
+        self.lineno = location.lineno
+        self.offset = location.offset
+        self.note = ''
+        if location.unsure:
+            self.note = '?'
 
 
 class _CodeAssist(object):

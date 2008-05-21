@@ -481,7 +481,8 @@ class _CodeAssist(object):
             self._offset = self.starting_offset + len(common_start)
         prompt = 'Completion for %s: ' % self.expression
         result = self.env.ask_completion(prompt, names, self.starting)
-        self._apply_assist(result)
+        if result is not None:
+            self._apply_assist(result)
 
     def lucky_assist(self, prefix):
         names = self._calculate_proposals()

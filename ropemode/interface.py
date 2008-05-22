@@ -449,12 +449,18 @@ class RopeMode(object):
 
 class Location(object):
     def __init__(self, location):
+        self.location = location
         self.filename = location.resource.real_path
-        self.lineno = location.lineno
         self.offset = location.offset
         self.note = ''
         if location.unsure:
             self.note = '?'
+
+    @property
+    def lineno(self):
+        if hasattr(self.location, 'lineno'):
+            return self.location.lineno
+        return self.location.resource.read().count('\n', 0, self.offset) + 1
 
 
 class _CodeAssist(object):

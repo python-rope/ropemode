@@ -369,7 +369,7 @@ class ChangeSignature(Refactoring):
     def _calculate_changes(self, values, task_handle):
         signature = values.get('signature')
         args = re.sub(r'[\s\(\)]+', '', signature).split(',')
-        olds = [arg[0] for arg in self.changer.get_args()]
+        olds = [arg[0] for arg in self._get_args()]
 
         changers = []
         for arg in list(olds):
@@ -393,9 +393,14 @@ class ChangeSignature(Refactoring):
         return self.changer.get_changes(changers, task_handle=task_handle,
                                         **values)
 
+    def _get_args(self):
+        if hasattr(self.changer, 'get_args'):
+            return self.changer.get_args()
+        return self.changer.get_definition_info().args_with_defaults
+
     def _get_confs(self):
         args = []
-        for arg, default in self.changer.get_args():
+        for arg, default in self._get_args():
             args.append(arg)
         signature = '(' + ', '.join(args) + ')'
         return {'signature': dialog.Data('Change the signature: ',

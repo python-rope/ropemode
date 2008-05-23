@@ -6,8 +6,15 @@ from rope.base import exceptions
 class Logger(object):
 
     message = None
+    only_short = False
 
-    def __call__(self, message):
+    def __call__(self, message, short=None):
+        if short is None or not self.only_short:
+            self._show(message)
+        if short is not None:
+            self._show(short)
+
+    def _show(self, message):
         if message is None:
             print message
         else:
@@ -22,8 +29,9 @@ def lisphook(func):
             func(*args, **kwds)
         except Exception, e:
             trace = str(traceback.format_exc())
-            logger('%s\nIgnored an exception in ropemacs hook: %s' %
-                   (trace, _exception_message(e)))
+            short = 'Ignored an exception in ropemode hook: %s' % \
+                    _exception_message(e)
+            logger(trace, short)
     newfunc.lisp = None
     newfunc.__name__ = func.__name__
     newfunc.__doc__ = func.__doc__
@@ -44,9 +52,10 @@ def _exception_handler(func):
         try:
             func(*args, **kwds)
         except exceptions.RopeError, e:
-            logger(str(traceback.format_exc()))
+            short = None
             if isinstance(e, input_exceptions):
-                logger(_exception_message(e))
+                short = _exception_message(e)
+            logger(str(traceback.format_exc()), short)
     newfunc.__name__ = func.__name__
     newfunc.__doc__ = func.__doc__
     return newfunc

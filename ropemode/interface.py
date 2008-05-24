@@ -431,7 +431,7 @@ class RopeMode(object):
 
     def _save_buffers(self, only_current=False):
         if only_current:
-            filenames = self.env.filename()
+            filenames = [self.env.filename()]
         else:
             filenames = self.env.filenames()
         pythons = []

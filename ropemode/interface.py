@@ -354,6 +354,13 @@ class RopeMode(object):
             libutils.analyze_modules(self.project, task_handle=handle)
         refactor.runtask(self.env, _analyze_modules, 'Analyze project modules')
 
+    @decorators.local_command()
+    def run_module(self):
+        """Run and perform dynamic object analysis on this module"""
+        self._check_project()
+        resource = self._get_resource()
+        self.project.pycore.run_module(resource).wait_process()
+
     def _create(self, name, callback, parentname='source'):
         self._check_project()
         confs = {'name': dialog.Data(name.title() + ' name: ')}

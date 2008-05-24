@@ -359,7 +359,11 @@ class RopeMode(object):
         """Run and perform dynamic object analysis on this module"""
         self._check_project()
         resource = self._get_resource()
-        self.project.pycore.run_module(resource).wait_process()
+        process = self.project.pycore.run_module(resource)
+        try:
+            process.wait_process()
+        finally:
+            process.kill_process()
 
     def _create(self, name, callback, parentname='source'):
         self._check_project()

@@ -164,11 +164,6 @@ class RopeMode(object):
             return codeassist.get_calltip(project, text, offset, *args, **kwds)
         self._base_show_doc(prefix, _get_doc)
 
-    @decorators.local_command()
-    def show_call_doc(self, prefix):
-        self._check_project()
-        self.env.message('ropemode: use `show_calltip\' instead!')
-
     def _base_show_doc(self, prefix, get_doc):
         maxfixes = self.env.get('codeassist_maxfixes')
         text = self._get_text()

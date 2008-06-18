@@ -1,3 +1,5 @@
+import os
+
 import rope.base.change
 from rope.base import libutils
 from rope.contrib import codeassist, generate, autoimport, findit
@@ -398,9 +400,24 @@ class RopeMode(object):
 
     def _check_project(self):
         if self.project is None:
-            self.open_project()
+            if self.env.get('guess_project'):
+                self.open_project(self._guess_project())
+            else:
+                self.open_project()
         else:
             self.project.validate(self.project.root)
+
+    def _guess_project(self):
+        cwd = self.env.filename()
+        if cwd is not None:
+            while True:
+                ropefolder = os.path.join(cwd, '.ropeproject')
+                if os.path.exists(ropefolder) and os.path.isdir(ropefolder):
+                    return cwd
+                newcwd = os.path.dirname(cwd)
+                if newcwd == cwd:
+                    break
+                cwd = newcwd
 
     def _reload_buffers(self, changes, undo=False):
         self._reload_buffers_for_changes(

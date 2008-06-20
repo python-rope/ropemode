@@ -21,7 +21,7 @@ class Environment(object):
     def y_or_n(self, prompt):
         pass
 
-    def get(self, name):
+    def get(self, name, default=None):
         pass
 
     def get_offset(self):

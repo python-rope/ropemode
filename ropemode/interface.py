@@ -171,14 +171,15 @@ class RopeMode(object):
         text = self._get_text()
         offset = self.env.get_offset()
         docs = get_doc(self.project, text, offset,
-                       self._get_resource(), maxfixes)
+                       self.resource, maxfixes)
         self.env.show_doc(docs, prefix)
         if docs is None:
             self.env.message('No docs avilable!')
 
     def _get_text(self):
-        if not self.env.is_modified():
-            return self._get_resource().read()
+        resource = self.resource
+        if not self.env.is_modified() and resource is not None:
+            return resource.read()
         return self.env.get_text()
 
     def _base_findit(self, do_find, optionals, get_kwds):
@@ -340,8 +341,7 @@ class RopeMode(object):
     def analyze_module(self):
         """Perform static object analysis on this module"""
         self._check_project()
-        resource = self._get_resource()
-        self.project.pycore.analyze_module(resource)
+        self.project.pycore.analyze_module(self.resource)
 
     @decorators.global_command()
     def analyze_modules(self):
@@ -355,8 +355,7 @@ class RopeMode(object):
     def run_module(self):
         """Run and perform dynamic object analysis on this module"""
         self._check_project()
-        resource = self._get_resource()
-        process = self.project.pycore.run_module(resource)
+        process = self.project.pycore.run_module(self.resource)
         try:
             process.wait_process()
         finally:
@@ -386,9 +385,8 @@ class RopeMode(object):
             self.env.goto_line(lineno)
 
     def _get_location(self):
-        resource = self._get_resource()
         offset = self.env.get_offset()
-        return resource, offset
+        return self.resource, offset
 
     def _get_resource(self, filename=None):
         if filename is None:
@@ -397,6 +395,16 @@ class RopeMode(object):
             return
         resource = libutils.path_to_resource(self.project, filename, 'file')
         return resource
+
+    @property
+    def resource(self):
+        """the current resource
+
+        Returns `None` when file does not exist.
+        """
+        resource = self._get_resource()
+        if resource and resource.exists():
+            return resource
 
     def _check_project(self):
         if self.project is None:
@@ -552,7 +560,7 @@ class _CodeAssist(object):
 
     def _calculate_proposals(self):
         self.interface._check_project()
-        resource = self.interface._get_resource()
+        resource = self.interface.resource
         maxfixes = self.env.get('codeassist_maxfixes')
         proposals = codeassist.code_assist(
             self.interface.project, self.source, self.offset,

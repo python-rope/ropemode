@@ -391,7 +391,7 @@ class RopeMode(object):
     def _get_resource(self, filename=None):
         if filename is None:
             filename = self.env.filename()
-        if filename is None:
+        if filename is None or self.project is None:
             return
         resource = libutils.path_to_resource(self.project, filename, 'file')
         return resource

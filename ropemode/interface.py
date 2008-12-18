@@ -1,7 +1,7 @@
 import os
 
 import rope.base.change
-from rope.base import libutils
+from rope.base import libutils, utils
 from rope.contrib import codeassist, generate, autoimport, findit
 
 from ropemode import refactor, decorators, dialog
@@ -504,11 +504,6 @@ class _CodeAssist(object):
         self.interface = interface
         self.autoimport = interface.autoimport
         self.env = env
-        self._source = None
-        self._offset = None
-        self._starting_offset = None
-        self._starting = None
-        self._expression = None
 
     def code_assist(self, prefix):
         names = self._calculate_proposals()
@@ -596,33 +591,26 @@ class _CodeAssist(object):
         return prefix
 
     @property
+    @utils.cacheit
     def offset(self):
-        if self._offset is None:
-            self._offset = self.env.get_offset()
-        return self._offset
+        return self.env.get_offset()
 
     @property
+    @utils.cacheit
     def source(self):
-        if self._source is None:
-            self._source = self.interface._get_text()
-        return self._source
+        return self.interface._get_text()
 
     @property
+    @utils.cacheit
     def starting_offset(self):
-        if self._starting_offset is None:
-            self._starting_offset = codeassist.starting_offset(self.source,
-                                                               self.offset)
-        return self._starting_offset
+        return codeassist.starting_offset(self.source, self.offset)
 
     @property
+    @utils.cacheit
     def starting(self):
-        if self._starting is None:
-            self._starting = self.source[self.starting_offset:self.offset]
-        return self._starting
+        return self.source[self.starting_offset:self.offset]
 
     @property
+    @utils.cacheit
     def expression(self):
-        if self._expression is None:
-            self._expression = codeassist.starting_expression(self.source,
-                                                              self.offset)
-        return self._expression
+        return codeassist.starting_expression(self.source, self.offset)

@@ -50,7 +50,7 @@ input_exceptions = (exceptions.RefactoringError,
 def _exception_handler(func):
     def newfunc(*args, **kwds):
         try:
-            func(*args, **kwds)
+            return func(*args, **kwds)
         except exceptions.RopeError, e:
             short = None
             if isinstance(e, input_exceptions):

@@ -233,6 +233,10 @@ class RopeMode(object):
     def auto_import(self):
         _CodeAssist(self, self.env).auto_import()
 
+    @decorators.local_command()
+    def completions(self):
+        return _CodeAssist(self, self.env)._calculate_proposals()
+
     def _check_autoimport(self):
         self._check_project()
         if self.autoimport is None:

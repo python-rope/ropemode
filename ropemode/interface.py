@@ -235,7 +235,7 @@ class RopeMode(object):
 
     @decorators.local_command()
     def completions(self):
-        return _CodeAssist(self, self.env)._calculate_proposals()
+        return _CodeAssist(self, self.env).completions()
 
     def _check_autoimport(self):
         self._check_project()
@@ -546,6 +546,11 @@ class _CodeAssist(object):
             self._insert_import(name, module)
         else:
             self.env.message('Global name %s not found!' % name)
+
+    def completions(self):
+        names = self._calculate_proposals()
+        prefix = self.offset - self.starting_offset
+        return [name[prefix:] for name in names]
 
     def _apply_assist(self, assist):
         if ' : ' in assist:

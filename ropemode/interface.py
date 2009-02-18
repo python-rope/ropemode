@@ -504,7 +504,6 @@ class _CodeAssist(object):
 
     def __init__(self, interface, env):
         self.interface = interface
-        self.autoimport = interface.autoimport
         self.env = env
 
     def code_assist(self, prefix):
@@ -621,3 +620,7 @@ class _CodeAssist(object):
     @utils.cacheit
     def expression(self):
         return codeassist.starting_expression(self.source, self.offset)
+
+    @property
+    def autoimport(self):
+        return self.interface.autoimport

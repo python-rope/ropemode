@@ -45,7 +45,7 @@ class Refactoring(object):
             self._perform(changes)
         if action == 'preview':
             if changes is not None:
-                diffs = str(changes.get_description())
+                diffs = changes.get_description()
                 if self.env.preview_changes(diffs):
                     self._perform(changes)
                 else:

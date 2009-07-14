@@ -507,27 +507,28 @@ class _CodeAssist(object):
         self.env = env
 
     def code_assist(self, prefix):
-        names = self._calculate_proposals()
+        proposals = self._calculate_proposals()
         if prefix is not None:
             arg = self.env.prefix_value(prefix)
             if arg == 0:
                 arg = len(names)
-            common_start = self._calculate_prefix(names[:arg])
+            common_start = self._calculate_prefix(proposals[:arg])
             self.env.insert(common_start[self.offset - self.starting_offset:])
             self._starting = common_start
             self._offset = self.starting_offset + len(common_start)
         prompt = 'Completion for %s: ' % self.expression
-        result = self.env.ask_completion(prompt, names, self.starting)
+        proposals = map(self.env._completion_text, proposals)
+        result = self.env.ask_completion(prompt, proposals, self.starting)
         if result is not None:
             self._apply_assist(result)
 
     def lucky_assist(self, prefix):
-        names = self._calculate_proposals()
+        proposals = self._calculate_proposals()
         selected = 0
         if prefix is not None:
             selected = self.env.prefix_value(prefix)
-        if 0 <= selected < len(names):
-            result = names[selected]
+        if 0 <= selected < len(proposals):
+            result = self.env._completion_text(proposals[selected])
         else:
             self.env.message('Not enough proposals!')
             return
@@ -549,9 +550,10 @@ class _CodeAssist(object):
             self.env.message('Global name %s not found!' % name)
 
     def completions(self):
-        names = self._calculate_proposals()
+        proposals = self._calculate_proposals()
         prefix = self.offset - self.starting_offset
-        return [name[prefix:] for name in names]
+        return [self.env._completion_text(proposal)[prefix:]
+                for proposal in proposals]
 
     def _apply_assist(self, assist):
         if ' : ' in assist:
@@ -571,24 +573,27 @@ class _CodeAssist(object):
             self.interface.project, self.source, self.offset,
             resource, maxfixes=maxfixes)
         proposals = codeassist.sorted_proposals(proposals)
-        names = [proposal.name for proposal in proposals]
         if self.autoimport is not None:
             if self.starting.strip() and '.' not in self.expression:
                 import_assists = self.autoimport.import_assist(self.starting)
-                names.extend(x[0] + ' : ' + x[1] for x in import_assists)
-        return names
+                for assist in import_assists:
+                    p = codeassist.CompletionProposal(' : '.join(x),
+                                                      'autoimport')
+                    import_assists.append(p)
+        return proposals
 
     def _insert_import(self, name, module):
         lineno = self.autoimport.find_insertion_line(self.source)
         line = 'from %s import %s' % (module, name)
         self.env.insert_line(line, lineno)
 
-    def _calculate_prefix(self, names):
-        if not names:
+    def _calculate_prefix(self, proposals):
+        if not proposals:
             return ''
-        prefix = names[0]
-        for name in names:
+        prefix = self.env._completion_text(proposals[0])
+        for proposal in proposals:
             common = 0
+            name = self.env._completion_text(proposal)
             for c1, c2 in zip(prefix, name):
                 if c1 != c2 or ' ' in (c1, c2):
                     break

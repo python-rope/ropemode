@@ -577,7 +577,7 @@ class _CodeAssist(object):
             if self.starting.strip() and '.' not in self.expression:
                 import_assists = self.autoimport.import_assist(self.starting)
                 for assist in import_assists:
-                    p = codeassist.CompletionProposal(' : '.join(x),
+                    p = codeassist.CompletionProposal(' : '.join(assist),
                                                       'autoimport')
                     import_assists.append(p)
         return proposals

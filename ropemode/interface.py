@@ -579,7 +579,7 @@ class _CodeAssist(object):
                 for assist in import_assists:
                     p = codeassist.CompletionProposal(' : '.join(assist),
                                                       'autoimport')
-                    import_assists.append(p)
+                    proposals.append(p)
         return proposals
 
     def _insert_import(self, name, module):

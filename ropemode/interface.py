@@ -517,7 +517,7 @@ class _CodeAssist(object):
             self._starting = common_start
             self._offset = self.starting_offset + len(common_start)
         prompt = 'Completion for %s: ' % self.expression
-        proposals = map(self.env._completion_text, proposals)
+        proposals = map(self.env._completion_data, proposals)
         result = self.env.ask_completion(prompt, proposals, self.starting)
         if result is not None:
             self._apply_assist(result)

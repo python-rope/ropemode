@@ -174,7 +174,7 @@ class RopeMode(object):
                        self.resource, maxfixes)
         self.env.show_doc(docs, prefix)
         if docs is None:
-            self.env.message('No docs avilable!')
+            self.env.message('No docs available!')
 
     def _get_text(self):
         resource = self.resource
@@ -482,6 +482,16 @@ class RopeMode(object):
         elif data.kind == 'directory':
             ask_func = self.env.ask_directory
         return ask_func(**ask_args)
+
+    @decorators.local_command()
+    def get_docstring(self):
+        self._check_project()
+        # almost like _base_show_doc()
+        maxfixes = self.env.get('codeassist_maxfixes')
+        text = self._get_text()
+        offset = self.env.get_offset()
+        return codeassist.get_doc(self.project, text, offset,
+                                  self.resource, maxfixes)
 
 
 class Location(object):

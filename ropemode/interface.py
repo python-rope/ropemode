@@ -183,14 +183,26 @@ class RopeMode(object):
         self._base_show_doc(prefix, _get_doc)
 
     def _base_show_doc(self, prefix, get_doc):
+        docs = self._base_get_doc(get_doc)
+        if docs:
+            self.env.show_doc(docs, prefix)
+        else:
+            self.env.message('No docs available!')
+
+    @decorators.local_command()
+    def get_doc(self):
+        self._check_project()
+        return self._base_get_doc(codeassist.get_doc)
+
+    def _base_get_doc(self, get_doc):
         maxfixes = self.env.get('codeassist_maxfixes')
         text = self._get_text()
         offset = self.env.get_offset()
-        docs = get_doc(self.project, text, offset,
-                       self.resource, maxfixes)
-        self.env.show_doc(docs, prefix)
-        if docs is None:
-            self.env.message('No docs available!')
+        try:
+            return get_doc(self.project, text, offset,
+                           self.resource, maxfixes)
+        except exceptions.BadIdentifierError:
+            return None
 
     def _get_text(self):
         resource = self.resource
@@ -498,16 +510,6 @@ class RopeMode(object):
         elif data.kind == 'directory':
             ask_func = self.env.ask_directory
         return ask_func(**ask_args)
-
-    @decorators.local_command()
-    def get_docstring(self):
-        self._check_project()
-        # almost like _base_show_doc()
-        maxfixes = self.env.get('codeassist_maxfixes')
-        text = self._get_text()
-        offset = self.env.get_offset()
-        return codeassist.get_doc(self.project, text, offset,
-                                  self.resource, maxfixes)
 
 
 class Location(object):

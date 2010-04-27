@@ -421,7 +421,8 @@ class RopeMode(object):
     def _goto_location(self, resource, lineno):
         if resource:
             self.env.find_file(str(resource.real_path),
-                               resource.project != self.project)
+                               resource.project != self.project,
+                               other=self.env.get('goto_def_newwin'))
         if lineno:
             self.env.goto_line(lineno)
 

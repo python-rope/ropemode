@@ -272,6 +272,10 @@ class RopeMode(object):
     def completions(self):
         return _CodeAssist(self, self.env).completions()
 
+    @decorators.local_command()
+    def extended_completions(self):
+        return _CodeAssist(self, self.env).extended_completions()
+
     def _check_autoimport(self):
         self._check_project()
         if self.autoimport is None:
@@ -589,6 +593,12 @@ class _CodeAssist(object):
         prefix = self.offset - self.starting_offset
         return [self.env._completion_text(proposal)[prefix:]
                 for proposal in proposals]
+
+    def extended_completions(self):
+        proposals = self._calculate_proposals()
+        prefix = self.offset - self.starting_offset
+        return [[proposal.name[prefix:], proposal.get_doc(),
+                 proposal.type] for proposal in proposals]
 
     def _apply_assist(self, assist):
         if ' : ' in assist:

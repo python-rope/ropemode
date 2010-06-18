@@ -617,7 +617,8 @@ class _CodeAssist(object):
         proposals = codeassist.code_assist(
             self.interface.project, self.source, self.offset,
             resource, maxfixes=maxfixes)
-        proposals = codeassist.sorted_proposals(proposals)
+        if self.env.get('sorted_completions', True):
+            proposals = codeassist.sorted_proposals(proposals)
         if self.autoimport is not None:
             if self.starting.strip() and '.' not in self.expression:
                 import_assists = self.autoimport.import_assist(self.starting)

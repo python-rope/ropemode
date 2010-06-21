@@ -550,7 +550,7 @@ class _CodeAssist(object):
         if prefix is not None:
             arg = self.env.prefix_value(prefix)
             if arg == 0:
-                arg = len(names)
+                arg = len(proposals)
             common_start = self._calculate_prefix(proposals[:arg])
             self.env.insert(common_start[self.offset - self.starting_offset:])
             self._starting = common_start

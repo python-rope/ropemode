@@ -456,9 +456,9 @@ class RopeMode(object):
             return resource
 
     @decorators.global_command()
-    def project_is_open(self):
+    def get_project_root(self):
         if self.project is not None:
-            return True
+            return self.project.root.real_path
         else:
             return None
 

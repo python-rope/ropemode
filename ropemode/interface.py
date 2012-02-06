@@ -455,6 +455,13 @@ class RopeMode(object):
         if resource and resource.exists():
             return resource
 
+    @decorators.global_command()
+    def project_is_open(self):
+        if self.project is not None:
+            return True
+        else:
+            return None
+
     def _check_project(self):
         if self.project is None:
             if self.env.get('guess_project'):

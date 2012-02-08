@@ -180,7 +180,7 @@ class RopeMode(object):
     @decorators.local_command('a d', 'P', 'C-c d')
     def show_doc(self, prefix):
         self._check_project()
-        self._base_show_doc(prefix, codeassist.get_doc)
+        self._base_show_doc(prefix, self._base_get_doc(codeassist.get_doc))
 
     @decorators.local_command('a c', 'P')
     def show_calltip(self, prefix):
@@ -191,10 +191,9 @@ class RopeMode(object):
             except ValueError:
                 return None
             return codeassist.get_calltip(project, text, offset, *args, **kwds)
-        self._base_show_doc(prefix, _get_doc)
+        self._base_show_doc(prefix, self._base_get_doc(_get_doc))
 
-    def _base_show_doc(self, prefix, get_doc):
-        docs = self._base_get_doc(get_doc)
+    def _base_show_doc(self, prefix, docs):
         if docs:
             self.env.show_doc(docs, prefix)
         else:

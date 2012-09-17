@@ -47,13 +47,15 @@ input_exceptions = (exceptions.RefactoringError,
                     exceptions.ModuleSyntaxError,
                     exceptions.BadIdentifierError)
 
-def _exception_handler(func):
+def _exception_handler(func, raise_exceptions, error_return):
     def newfunc(*args, **kwds):
         try:
             return func(*args, **kwds)
         except exceptions.RopeError, e:
             short = None
             if isinstance(e, input_exceptions):
+                if not raise_exceptions:
+                    return error_return
                 short = _exception_message(e)
             logger(str(traceback.format_exc()), short)
     newfunc.__name__ = func.__name__
@@ -72,10 +74,12 @@ def rope_hook(hook):
         return func
     return decorator
 
-
-def local_command(key=None, prefix=False, shortcut=None, name=None):
+def local_command(key=None, prefix=False, shortcut=None,
+                  name=None, raise_exceptions=True,
+                  error_return=None):
     def decorator(func, name=name):
-        func = _exception_handler(func)
+        func = _exception_handler(func, raise_exceptions,
+                                  error_return)
         func.kind = 'local'
         func.prefix = prefix
         func.local_key = key
@@ -86,10 +90,15 @@ def local_command(key=None, prefix=False, shortcut=None, name=None):
         return func
     return decorator
 
+def local_function(error_return=None):
+       return local_command(raise_exceptions=False,
+                            error_return=error_return)
 
-def global_command(key=None, prefix=False):
+def global_command(key=None, prefix=False, raise_exceptions=True,
+                   error_return=None):
     def decorator(func):
-        func = _exception_handler(func)
+        func = _exception_handler(func, raise_exceptions,
+                                  error_return)
         func.kind = 'global'
         func.prefix = prefix
         func.global_key = key

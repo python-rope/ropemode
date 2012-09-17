@@ -157,7 +157,7 @@ class RopeMode(object):
     def pop_mark(self):
         self.env.pop_mark()
 
-    @decorators.local_command()
+    @decorators.local_function()
     def definition_location(self):
         definition = self._base_definition_location()
         if definition:
@@ -182,7 +182,7 @@ class RopeMode(object):
         self._check_project()
         self._base_show_doc(prefix, self._base_get_doc(codeassist.get_doc))
 
-    @decorators.local_command()
+    @decorators.local_function()
     def get_calltip(self):
         self._check_project()
         def _get_doc(project, text, offset, *args, **kwds):
@@ -203,7 +203,7 @@ class RopeMode(object):
         else:
             self.env.message('No docs available!')
 
-    @decorators.local_command()
+    @decorators.local_function()
     def get_doc(self):
         self._check_project()
         return self._base_get_doc(codeassist.get_doc)
@@ -275,11 +275,11 @@ class RopeMode(object):
     def auto_import(self):
         _CodeAssist(self, self.env).auto_import()
 
-    @decorators.local_command()
+    @decorators.local_function([])
     def completions(self):
         return _CodeAssist(self, self.env).completions()
 
-    @decorators.local_command()
+    @decorators.local_function([])
     def extended_completions(self):
         return _CodeAssist(self, self.env).extended_completions()
 

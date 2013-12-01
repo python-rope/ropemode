@@ -1,6 +1,4 @@
-"""ropemode, a helper for using rope refactoring library in IDEs"""
-
-INFO = __doc__
+INFO = """ropemode, a helper for using rope refactoring library in IDEs"""
 VERSION = '0.3'
 COPYRIGHT = """\
 Copyright (C) 2007-2012 Ali Gholami Rudi

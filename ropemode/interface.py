@@ -628,9 +628,15 @@ class _CodeAssist(object):
         self.interface._check_project()
         resource = self.interface.resource
         maxfixes = self.env.get('codeassist_maxfixes')
-        proposals = codeassist.code_assist(
-            self.interface.project, self.source, self.offset,
-            resource, maxfixes=maxfixes)
+        try:
+            proposals = codeassist.code_assist(
+                self.interface.project, self.source, self.offset,
+                resource, maxfixes=maxfixes)
+        except exceptions.ModuleSyntaxError as err:
+            if self.env.get('codeassist_noerror'):
+                proposals = []
+            else:
+                raise err
         if self.env.get('sorted_completions', True):
             proposals = codeassist.sorted_proposals(proposals)
         if self.autoimport is not None:

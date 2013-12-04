@@ -552,6 +552,18 @@ class Location(object):
             return self.location.lineno
         return self.location.resource.read().count('\n', 0, self.offset) + 1
 
+    @property
+    def line_content(self):
+        resource_contents = self.location.resource.read()
+        # rfind returns -1 for start of string, so by adding 1 we get the start
+        # of the string. When a match is found we want to exclude the matching
+        # character so again we add 1.
+        line_start = resource_contents.rfind("\n", 0, self.offset) + 1
+        line_end = resource_contents.find("\n", self.offset)
+        if line_end < 0:
+            line_end = len(resource_contents)
+        return resource_contents[line_start:line_end]
+
 
 class _CodeAssist(object):
 

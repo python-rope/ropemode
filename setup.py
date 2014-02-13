@@ -32,4 +32,3 @@ setup(name='ropemode',
       requires=['rope (>= 0.9.4)'],
       **extra_kwargs
 )
-

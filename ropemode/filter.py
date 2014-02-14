@@ -23,7 +23,7 @@ def resources(project, rules):
         except exceptions.ResourceNotFoundError:
             continue
         if resource.is_folder():
-            matches = set(filter(lambda item: resource.contains(item), all))
+            matches = set([item for item in all if resource.contains(item)])
         else:
             matches = set([resource])
         if first == '+':

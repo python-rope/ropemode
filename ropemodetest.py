@@ -1,3 +1,4 @@
+from future.builtins import super
 import unittest
 
 from ropemode import dialog

@@ -1,3 +1,5 @@
+from future.builtins import dict, map, range, str, zip
+
 import os
 
 import rope.base.change
@@ -300,7 +302,7 @@ class RopeMode(object):
         if modules:
             for i in range(len(modules)):
                 modname = modules[i]
-                if not isinstance(modname, basestring):
+                if not isinstance(modname, str):
                     modname = modname.value()
                 modnames.append(modname)
         else:
@@ -582,7 +584,7 @@ class _CodeAssist(object):
             self._starting = common_start
             self._offset = self.starting_offset + len(common_start)
         prompt = 'Completion for %s: ' % self.expression
-        proposals = map(self.env._completion_data, proposals)
+        proposals = list(map(self.env._completion_data, proposals))
         result = self.env.ask_completion(prompt, proposals, self.starting)
         if result is not None:
             self._apply_assist(result)

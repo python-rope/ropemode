@@ -1,3 +1,5 @@
+from future.builtins import str
+
 import re
 
 import rope.base.change

@@ -1,7 +1,7 @@
 """ropemode, a helper for using rope refactoring library in IDEs"""
 
 INFO = __doc__
-VERSION = '0.2'
+VERSION = '0.3a1'
 COPYRIGHT = """\
 Copyright (C) 2007-2012 Ali Gholami Rudi
 

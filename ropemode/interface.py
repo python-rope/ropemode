@@ -78,10 +78,28 @@ class RopeMode(object):
         if self.project is not None:
             self.close_project()
 
+    def _find_project(self):
+        root = os.curdir
+
+        # TODO: allow to configure the search depth
+        for _ in range(2):
+            root = os.path.join(root, os.pardir)
+
+        for root, dirs, files in os.walk(top=os.pardir, topdown=False):
+            if [f for f in files if f.endswith('.py')]:
+                for folder in dirs:
+                    if folder == '.ropeproject':
+                        return os.path.abspath(root)
+        else:
+            return None
+
     @decorators.global_command('o')
     def open_project(self, root=None):
         if not root:
-            root = self.env.ask_directory('Rope project root folder: ')
+            # TODO: find project only if autodiscovery is set
+            root = self._find_project()
+            if root is None:
+                root = self.env.ask_directory('Rope project root folder: ')
         if self.project is not None:
             self.close_project()
         address = rope.base.project._realpath(os.path.join(root,

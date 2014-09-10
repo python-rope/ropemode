@@ -79,17 +79,17 @@ class RopeMode(object):
             self.close_project()
 
     def _find_project(self):
-        root = os.curdir
+        root = os.path.abspath(os.path.dirname(self.env.filename()))
 
         # TODO: allow to configure the search depth
         for _ in range(2):
             root = os.path.join(root, os.pardir)
 
-        for root, dirs, files in os.walk(top=os.pardir, topdown=False):
+        for curdir, dirs, files in os.walk(top=root, topdown=False):
             if [f for f in files if f.endswith('.py')]:
                 for folder in dirs:
                     if folder == '.ropeproject':
-                        return os.path.abspath(root)
+                        return os.path.abspath(curdir)
         else:
             return None
 

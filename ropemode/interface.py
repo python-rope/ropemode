@@ -615,13 +615,15 @@ class _CodeAssist(object):
             self.env.message('Global name %s not found!' % name)
 
     def completions(self):
-        proposals = self._calculate_proposals()
+        proposals = self._calculate_proposals(
+            noerror=self.env.get('codeassist_noerror'))
         prefix = self.offset - self.starting_offset
         return [self.env._completion_text(proposal)[prefix:]
                 for proposal in proposals]
 
     def extended_completions(self):
-        proposals = self._calculate_proposals()
+        proposals = self._calculate_proposals(
+            noerror=self.env.get('codeassist_noerror'))
         prefix = self.offset - self.starting_offset
         return [[proposal.name[prefix:], proposal.get_doc(),
                  proposal.type] for proposal in proposals]
@@ -636,13 +638,19 @@ class _CodeAssist(object):
             self.env.delete(self.starting_offset + 1, self.offset + 1)
             self.env.insert(assist)
 
-    def _calculate_proposals(self):
+    def _calculate_proposals(self, noerror=False):
         self.interface._check_project()
         resource = self.interface.resource
         maxfixes = self.env.get('codeassist_maxfixes')
-        proposals = codeassist.code_assist(
-            self.interface.project, self.source, self.offset,
-            resource, maxfixes=maxfixes)
+        try:
+            proposals = codeassist.code_assist(
+                self.interface.project, self.source, self.offset,
+                resource, maxfixes=maxfixes)
+        except exceptions.ModuleSyntaxError as err:
+            if noerror:
+                proposals = []
+            else:
+                raise err
         if self.env.get('sorted_completions', True):
             proposals = codeassist.sorted_proposals(proposals)
         if self.autoimport is not None:

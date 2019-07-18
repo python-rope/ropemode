@@ -300,7 +300,7 @@ class RopeMode(object):
         if modules:
             for i in range(len(modules)):
                 modname = modules[i]
-                if not isinstance(modname, basestring):
+                if not isinstance(modname, str):
                     modname = modname.value()
                 modnames.append(modname)
         else:

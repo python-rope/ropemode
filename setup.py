@@ -1,9 +1,5 @@
 extra_kwargs = {}
-try:
-    from setuptools import setup
-    extra_kwargs['install_requires'] = ['rope >= 0.9.4']
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
 
 import ropemode
 
@@ -29,7 +25,8 @@ setup(name='ropemode',
       packages=['ropemode'],
       license='GNU GPL',
       classifiers=classifiers,
+      test_suite='ropemodetest',
       requires=['rope (>= 0.9.4)'],
-      **extra_kwargs
+      install_requires='rope >= 0.9.4'
 )
 

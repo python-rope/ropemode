@@ -439,6 +439,25 @@ class GenerateFunction(_GenerateElement):
 
 class GenerateClass(_GenerateElement):
     key = 'n c'
+    optionals = {"destination module": dialog.Data(
+                     prompt="Destination module: ")}
+
+    def _calculate_changes(self, values, task_handle):
+        kind = self.name.split("_")[-1]
+
+        if "destination module" in values and values["destination module"]:
+            goal_resource = self.project.get_resource(values["destination module"])
+        else:
+            goal_resource = None
+        generator = rope.contrib.generate.create_generate(
+            kind,
+            self.project,
+            self.resource,
+            self.offset,
+            goal_resource=goal_resource,
+        )
+
+        return generator.get_changes()
 
 
 class GenerateModule(_GenerateElement):

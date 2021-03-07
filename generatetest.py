@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 from rope.base import libutils
 from rope.base.project import Project
+from rope.base.exceptions import RefactoringError
 
 from ropemode.environment import Environment
 from ropemode.interface import RopeMode
@@ -48,10 +49,20 @@ class GenerateTest(unittest.TestCase):
             self._create_generate_called_with("goal_resource").path, "other.py"
         )
 
+    def test_should_raise_exception_when_module_not_found(self):
+        self._given_menu_options_will_be_selected(["destination module", "perform"])
+        self._given_value_answered("other")
+        self.interface.project.find_module.return_value = None
+
+        with self.assertRaises(RefactoringError):
+            generate = GenerateClass(self.interface, self.env)
+            generate.show()
+
     def _mock_rope_project(self):
         self.interface.open_project = Mock()
         self.interface.project = MagicMock()
         self.interface.project.get_resource.return_value = ResourceMock
+        self.interface.project.find_module.return_value = ResourceMock
 
     def _mock_rope_create_generate_method(self):
         self._cg_patcher = patch("rope.contrib.generate.create_generate")
@@ -81,6 +92,7 @@ class GenerateTest(unittest.TestCase):
         env.ask_directory = MagicMock(return_value="/tmp/")
         env.y_or_n = MagicMock(return_value=True)
         env.create_progress = MagicMock(return_value=Mock())
+        env.message = Mock()
         env.filenames = MagicMock(
             return_value=[
                 "test.py",

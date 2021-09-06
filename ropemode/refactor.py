@@ -12,6 +12,7 @@ import rope.refactor.rename
 import rope.refactor.restructure
 import rope.refactor.usefunction
 from rope.base import taskhandle
+import rope.base.exceptions
 
 from ropemode import dialog, filter
 
@@ -439,6 +440,36 @@ class GenerateFunction(_GenerateElement):
 
 class GenerateClass(_GenerateElement):
     key = 'n c'
+
+    def _get_optionals(self):
+        return {"destination module": dialog.Data(
+                    prompt="Destination module: "
+    )}
+
+    def _calculate_changes(self, values, task_handle):
+        self.generator = rope.contrib.generate.create_generate(
+            self._get_kind(), self.project, self.resource,
+            self.offset, goal_resource=self._get_goal_resource(values))
+        return self.generator.get_changes()
+
+    def _get_kind(self):
+        kind = self.name.split('_')[-1]
+        return kind
+
+    def _get_goal_resource(self, values):
+        goal_resource = None
+        if self._has_destination_module(values):
+            goal_resource = self._get_destination_resource_or_raise_error(values, goal_resource)
+        return goal_resource
+
+    def _has_destination_module(self, values):
+        return "destination module" in values and values["destination module"]
+
+    def _get_destination_resource_or_raise_error(self, values, goal_resource):
+        goal_resource = self.project.find_module(values["destination module"])
+        if not goal_resource:
+            raise rope.base.exceptions.RefactoringError("Module not found")
+        return goal_resource
 
 
 class GenerateModule(_GenerateElement):

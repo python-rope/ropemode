@@ -17,3 +17,9 @@ Installation
     pip install ropemode
 
 
+Run tests
+=========
+
+.. code:: bash
+
+   pytest

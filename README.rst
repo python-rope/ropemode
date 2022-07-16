@@ -11,3 +11,16 @@ See also rope_.
 
 Users should not install this package directly, but either
 ropevim_ or ropemacs_ instead.
+
+
+Contributing
+============
+
+
+The following sets up a development environment and run the tests:
+
+.. code:: bash
+
+   pip install -e .
+   pip install -r test_requirements.txt
+   pytest

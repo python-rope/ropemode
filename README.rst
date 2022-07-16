@@ -1,6 +1,13 @@
+========
+ropemode
+========
 
-**Note:** *Please note that this project has been moved to* `GitHub python-rope / ropemode`_
+Library for common functionality between ropevim_ and ropemacs_.
+See also rope_.
 
-.. _GitHub python-rope / ropemode: https://github.com/python-rope/ropemode
+.. _ropevim: https://github.com/python-rope/ropevim
+.. _rope: https://github.com/python-rope/rope
+.. _ropemacs: https://github.com/python-rope/ropemacs
 
-
+Users should not install this package directly, but either
+ropevim_ or ropemacs_ instead.

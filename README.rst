@@ -30,3 +30,12 @@ The following sets up a development environment and run the tests:
    pip install -e .
    pip install -r test_requirements.txt
    pytest
+
+
+Special Thanks
+==============
+
+Many thanks the following people:
+
+- Ali Gholami Rudi (`@aligrudi`_) for initially creating the initial rope,
+  ropemode project and most of Rope's code

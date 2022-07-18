@@ -1,0 +1,39 @@
+[project]
+name = 'ropemode'
+description = 'a helper for using rope refactoring library in IDEs'
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Operating System :: OS Independent',
+    'Environment :: X11 Applications',
+    'Environment :: Win32 (MS Windows)',
+    'Environment :: MacOS X',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License (GPL)',
+    'Natural Language :: English',
+    'Programming Language :: Python',
+    'Topic :: Software Development',
+]
+version = '0.5'
+dependencies = ['rope >= 0.9.4']
+
+[[project.authors]]
+name = 'Lie Ryan'
+email = 'lieryan.24@proton.me'
+
+[project.license]
+text = 'GNU GPL'
+
+[project.urls]
+Source = 'https://github.com/python-rope/ropemode'
+
+[project.optional-dependencies]
+dev = [
+    'build>=0.7.0',
+]
+
+[build-system]
+requires = [
+    'setuptools',
+    'setuptools-scm',
+]
+build-backend = 'setuptools.build_meta'

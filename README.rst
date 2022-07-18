@@ -39,3 +39,5 @@ Many thanks the following people:
 
 - Ali Gholami Rudi (`@aligrudi`_) for initially creating the initial rope,
   ropemode project and most of Rope's code
+
+.. _`@aligrudi`: https://github.com/aligrudi

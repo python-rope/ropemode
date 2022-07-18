@@ -2,6 +2,12 @@
 ropemode
 ========
 
+|Build status badge| 
+
+.. |Build status badge| image:: https://github.com/python-rope/ropemode/actions/workflows/test.yml/badge.svg
+   :target: https://github.com/python-rope/ropemode/actions/workflows/test.yml
+   :alt: Build Status
+
 Library for common functionality between ropevim_ and ropemacs_.
 See also rope_.
 

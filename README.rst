@@ -2,11 +2,16 @@
 ropemode
 ========
 
-|Build status badge| 
+|Build status badge| |Latest version badge|
 
 .. |Build status badge| image:: https://github.com/python-rope/ropemode/actions/workflows/test.yml/badge.svg
    :target: https://github.com/python-rope/ropemode/actions/workflows/test.yml
    :alt: Build Status
+
+.. |Latest version badge| image:: https://badge.fury.io/py/ropemode.svg
+   :target: https://badge.fury.io/py/ropemode
+   :alt: Latest version
+
 
 Library for common functionality between ropevim_ and ropemacs_.
 See also rope_.

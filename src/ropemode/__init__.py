@@ -6,6 +6,7 @@ VERSION = '0.5'
 COPYRIGHT = """\
 Copyright (C) 2007-2012 Ali Gholami Rudi
 Copyright (C) 2013-2019 Matěj Cepl
+Copyright (C) 2021-2022 Lie Ryan
 
 This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

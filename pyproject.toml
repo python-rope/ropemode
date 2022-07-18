@@ -1,6 +1,7 @@
 [project]
 name = 'ropemode'
 description = 'a helper for using rope refactoring library in IDEs'
+readme = 'README.rst'
 classifiers = [
     'Development Status :: 4 - Beta',
     'Operating System :: OS Independent',

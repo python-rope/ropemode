@@ -18,6 +18,10 @@ version = '0.6.0'
 dependencies = ['rope >= 0.9.4']
 
 [[project.authors]]
+name = 'Ali Gholami Rudi'
+email = 'aligrudi@users.sourceforge.net'
+
+[[project.maintainers]]
 name = 'Lie Ryan'
 email = 'lieryan.24@proton.me'
 
